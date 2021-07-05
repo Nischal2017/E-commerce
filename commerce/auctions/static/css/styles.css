@@ -1,0 +1,48 @@
+body {
+        padding-top: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+        padding-bottom: 10px;
+}
+@font-face {
+        font-family: 'Raspoutine Medium';
+        font-style: normal;
+        font-weight: normal;
+        src: local('Raspoutine Medium'), url('RaspoutineMedium_TB.woff') format('woff');
+}
+
+#top {  
+        background-color: #ffffff;
+        font-style: bold;
+        font-family: Raspoutine Medium;
+        color: #e42378;
+        font-size: 52px;
+        padding: 5px;
+        vertical-align: middle;
+        text-align: center;
+    }
+#sign {
+        background-color: #e42378;   
+        color: #ffffff ;
+        position: relative;
+        text-align: right;
+        
+}
+.nav {
+        background-image: linear-gradient( #e42378,#d79ca6);
+        margin: 0;  
+        border-radius: 0; 
+}
+.nav-link {
+    float: right;
+    color: #ffffff;
+}
+.nav-link:hover{
+        color: #d79ca6;
+}
+
+img{    
+        float: left;
+        height:100px;
+        width: auto;
+}
