@@ -1,0 +1,224 @@
+{% extends "auctions/layout.html" %}
+{% block style%}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    .checked {
+        color: orange;
+    }
+    .heading-bg{
+        padding: 5px;
+        margin: 10px;
+        font-style: bold;
+        font-family: Raspoutine Medium;
+        color: #ffffff;
+        text-align: center;
+    }
+    .body{
+        margin: 25px;
+        padding: 20px;
+        background-color: #ffffff;
+        border-color:  #d79ca6;
+        border-style: outset;
+        min-height: 500px;
+        display: flex;
+        min-width: 650px;
+    }
+    #img-bg{
+        width: max-content;
+        height: 220px;
+        margin: 10px;
+        padding: 10px;
+    }
+    .image{
+        height: 300px;
+        width: auto;
+    }
+    #text{
+        margin: 10px;
+        padding: 10px;
+    }
+    #text-info{
+        font-family: Raspoutine Medium;  
+        color: #e42378 ;
+        font-size: 20px;
+    }
+    #sub{
+        background-color:#d79ca6 ; 
+        color:#ffffff;
+        border-color: #d79ca6;
+    }
+    #sub:hover{
+        border-width: 3px;
+        border-color: #e42378;
+        cursor: hand;
+        cursor: pointer;
+        opacity: .9;
+    }
+    #bid{
+        border-color: #d79ca6;
+    }
+    #bid:hover{
+        border-width: 3px;
+        border-color: #e42378;
+        cursor: hand;
+        cursor: pointer;
+        opacity: .9;
+    }
+    .comments-bg{
+        margin: 25px;
+        padding: 20px;
+        background-color: #ffffff;
+        border-color:  #d79ca6;
+        border-style: outset;
+        height: fit-content;
+        display: flex;
+        min-width: 650px;
+    }
+    #comments-text{
+        padding: 5px;
+        margin: 10px;
+        font-style: bold;
+        font-family: Raspoutine Medium;
+        color:#ffffff;
+        text-align: center;
+    }
+    #add-comment{
+        width:100%;
+    }
+    .comment-input-bar{
+        width: 70%;
+        border-color: #e42378;
+        font-family: Raspoutine Medium;
+        padding: 5px;
+    }
+</style>
+{%endblock%}
+{% block body %}
+<div class='heading-bg'>
+    <h2>{{items.name}}</h2>
+</div>
+{% if items.active == True %}
+    <div class='body'>
+        <div id='img-bg'><img class='image' src="{{items.photo.url}}"></div>
+        <div id='text-info'>
+            <p ><strong style="color: black;">Created By:</strong> {{items.created_by}}</p>
+            <p><strong style="color: black;">Starting Bid:</strong>   ${{items.price}}</p>
+            {% if user.is_authenticated%}
+                {%if user.username != items.created_by.username%}
+                    {% if not present%}
+                        <form action="{% url 'listing' items.id %}" method="post" class="reg">
+                            {% csrf_token %}
+                            <p> 
+                                <input class="btn btn-primary" id='sub'type="submit" name="add-watchlist" value="Add to WatchList">
+                            </p>
+                        </form>
+                    {%else%}
+                        <p>
+                            <span class="badge badge-pill badge-primary" style="display: inline-block;">WatchList</span>
+                        </p>
+                    {%endif%}
+                    {% if bid.user == user %}
+                    <p>
+                        <span class="badge badge-pill badge-success" style="display: inline-block;">My Bid</span>
+                    </p>
+                    {%endif%}
+                    {% if present%}
+                    <form action="{% url 'listing' items.id %}" method="post" class="reg">
+                        {% csrf_token %}
+                        <p>
+                            <input class="btn btn-primary" id='sub' type="submit" name="remove-watchlist" value="Remove from WatchList"
+                                style="display: inline;">
+                        </p>
+                    </form>
+                    {%endif%}
+                    
+                {%else%}
+                        {%if user.username == items.created_by.username%}
+                            <form action="{% url 'listing' items.id %}" method="post" class="reg">
+                                {% csrf_token %}
+                                <p>
+                                    <input class="btn btn-primary" id='sub' type="submit" name="close-listing" value="Close Listing">
+                                </p>
+                            </form>
+                        {%endif%}
+                {%endif%}
+            {%endif%}
+            {% if user.is_authenticated%}
+                {% if user.username != items.created_by.username %}
+                    <form action="{% url 'listing' items.id %}" method="POST" class="reg">
+                        {% csrf_token %}
+                        <input id="bid" type="decimal" name="new-bid" placeholder="Enter Your Bid" style="display: inline-block;">
+                        <input class="btn btn-primary" id='sub' type="submit" name="new-bid-submit" value="Bid" style="display: inline-block;">
+                    </form>
+                {%endif%}
+            {%endif%}
+            <br>
+            {% if messages %}
+            <div class="alert alert-danger" role="alert">
+                {% for message in messages %}
+                {{ message }}
+                {% endfor %}
+            </div>
+            {%endif%}
+            <br>
+            {% if bid == None%}
+                <p><strong style="color: black;">Current Bid:</strong> No bids placed</p>
+            {% else %}
+                <p><strong style="color: black;">Current Bid:</strong> $ {{bid.new_bid}}</p>
+            {%endif%}
+            <p><strong style="color: black;">Description:</strong> {{items.description}}</p>
+            {% if items.additional_description != None %}
+                <p style="font-size: 15px;">{{items.additional_description}}</p>
+            {%endif%}
+        </div>
+        </div>
+        <div id="comments-text">
+            <h3>Comments</h3>
+        </div>
+        {% for comment in items.comments.all %}
+            <div class="comments-bg"> 
+                <hr>
+                <div class="card" style="width: 100%;">
+                    <div class="card-header">
+                        {{comment.author.first_name}} {{comment.author.last_name}}
+                    </div>
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                            <p>{{comment.comment}}</p>
+                            <footer class="blockquote-footer">
+                                {% with ''|center:comment.rating as range %}
+                                {% for _ in range %}
+                                <span class="fa fa-star checked"></span>
+                                {% endfor %}
+                                {% endwith %}
+                            </footer>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        {%endfor%}
+        {% if user.is_authenticated%}
+        <div id="comments-text">
+            <h3 >Add Comment</h3>
+        </div>
+        <div class="comments-bg">
+            <form action="{% url 'listing' items.id %}" method="POST" id="add-comment">
+                {% csrf_token %}
+                <div class="card" style="width: 100%;">
+                    <div class="card-header">
+                        {{user.first_name}} {{user.last_name}}
+                    </div>
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                        <p><textarea form='add-comment' name="comment" class="comment-input-bar" placeholder="Your Comment"></textarea></p>
+                        <footer class="blockquote-footer">
+                            <input type="number" name="rating" placeholder="Rating out of 5" max="5" class="comment-input-bar">
+                        </footer>
+                    </blockquote>
+                </div>
+                <button type="submit" name="comment-submit" style="position:relative;width:fit-content; float:right;">Save</button>
+            </form>
+        </div>
+        {%endif%}
+{%endif%}
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "auctions/layout.html" %}
+{% block style %}
+<style>
+    .heading-bg{
+        padding: 5px;
+        margin: 10px;
+        font-style: bold;
+        font-family: Raspoutine Medium;
+        color: #ffffff;
+    }
+    #body{
+        margin: 5px;
+        padding:20px;
+        
+    }
+    .reg{
+        padding: 20px;
+        margin: 5px;
+        width: 500px;
+    }
+    #text-info{
+        font-family: Raspoutine Medium;  
+        color: #ffffff ;
+        font-size: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <div id="body">
+    <div class='heading-bg'>
+        <h1>Register</h1>
+    </div>
+
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+
+    <form action="{% url 'register' %}" method="post" class="reg">
+        {% csrf_token %}
+        <div class="form-group">
+            <input class="form-control" type="text" name="first_name" placeholder="First Name">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="text" name="last_name" placeholder="Last Name">
+        </div>
+        <div class="form-group">
+            <input class="form-control" autofocus type="text" name="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="email" name="email" placeholder="Email Address">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password" placeholder="Password">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
+        </div>
+        <input class="btn btn-primary" type="submit" value="Register" style="background-color:#ffd3b5 ; color:#e42378; border-color:#ffd3b5;">
+    </form>
+
+    <div id="text-info">Already have an account? 
+        <p><a href="{% url 'login' %}"><button type="button" class="btn btn-primary" style="background-color:#ffd3b5 ; color:#e42378; border-color:#ffd3b5;">Log in</button></a></p></div>
+    </div>
+{% endblock %}

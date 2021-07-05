@@ -1,0 +1,55 @@
+{% extends "auctions/layout.html" %}
+{% block style %}
+<style>
+    .heading-bg{
+        padding: 5px;
+        margin: 10px;
+        font-style: bold;
+        font-family: Raspoutine Medium;
+        color: #ffffff;
+    }
+    #body {
+        margin: 5px;
+        padding: 20px;
+
+    }
+
+    .form-control {
+        padding: 20px;
+        margin: 5px;
+        width: 500px;
+    }
+    #text-info{
+        font-family: Raspoutine Medium;  
+        color: #ffffff ;
+        font-size: 20px;
+    }
+</style>
+{% endblock %}
+{% block body %}
+<div id="body">
+    <div class='heading-bg'>
+        <h1>Login</h1>
+    </div>
+
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+
+    <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password" placeholder="Password">
+        </div>
+        <input class="btn btn-primary" type="submit" value="Login" style="font-family: Raspoutine Medium;  color: #ffffff ;font-size: 20px;background-color:#ffd3b5 ; color:#e42378; border-color:#ffd3b5;text-align:center;">
+    </form>
+    <br>
+    <div id="text-info">Don't have an account?
+        <p><a href="{% url 'register' %}"><button type="button" class="btn btn-primary"
+                    style="background-color:#ffd3b5 ; color:#e42378; border-color:#ffd3b5;">Register</button></a></p>
+    </div>
+</div>
+{% endblock %}

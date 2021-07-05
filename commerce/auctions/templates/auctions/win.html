@@ -1,0 +1,183 @@
+{% extends "auctions/layout.html" %}
+{% block style%}
+<style>
+    .heading-bg {
+        padding: 5px;
+        margin: 10px;
+        font-style: bold;
+        font-family: Raspoutine Medium;
+        color: #ffffff;
+        text-align: center;
+    }
+
+    .body {
+        margin: 25px;
+        padding: 20px;
+        background-color: #ffffff;
+        border-color: #d79ca6;
+        border-style: outset;
+        min-height: 500px;
+        display: flex;
+        min-width: 650px;
+    }
+
+    #img-bg {
+        width: max-content;
+        height: 220px;
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .image {
+        height: 300px;
+        width: auto;
+    }
+
+    #text {
+        margin: 10px;
+        padding: 10px;
+    }
+
+    #text-info {
+        font-family: Raspoutine Medium;
+        color: #e42378;
+        font-size: 20px;
+    }
+
+    #sub {
+        background-color: #d79ca6;
+        color: #ffffff;
+        border-color: #d79ca6;
+    }
+
+    #sub:hover {
+        border-width: 3px;
+        border-color: #e42378;
+        cursor: hand;
+        cursor: pointer;
+        opacity: .9;
+    }
+
+    #bid {
+        border-color: #d79ca6;
+    }
+
+    #bid:hover {
+        border-width: 3px;
+        border-color: #e42378;
+        cursor: hand;
+        cursor: pointer;
+        opacity: .9;
+    }
+    .comments-bg{
+        margin: 25px;
+        padding: 20px;
+        background-color: #ffffff;
+        border-color:  #d79ca6;
+        border-style: outset;
+        height: fit-content;
+        display: flex;
+        min-width: 650px;
+    }
+    #comments-text{
+        padding: 5px;
+        margin: 10px;
+        font-style: bold;
+        font-family: Raspoutine Medium;
+        color:#ffffff;
+        text-align: center;
+    }
+    #add-comment{
+        width:100%;
+    }
+    .comment-input-bar{
+        width: 70%;
+        border-color: #e42378;
+        font-family: Raspoutine Medium;
+        padding: 5px;
+    }
+</style>
+{%endblock%}
+{% block body %}
+<div class='heading-bg'>
+    <h2>{{item.name}}</h2>
+</div>
+<div class='body'>
+    <div id='img-bg'><img class='image' src="{{item.photo.url}}"></div>
+    <div id='text-info'>
+        {% if user.is_authenticated%}
+            {% if user.username == winner.username%}
+                <div class="alert alert-success" role="alert">
+                    <h4 class="alert-heading">Congratulations {{winner.first_name}}</h4>
+                    <p>You were our highest bidder for this item when the auction ended. Congratulations on your 
+                        new {{item.name}}
+                    </p>
+                    <hr>
+                    <p class="mb-0">Please wait while our team contacts you to confirm your purchase</p>
+                </div>
+            {%endif%}
+        {% endif %}
+        <p><strong style="color: black;">Created By:</strong> {{item.created_by}}</p>
+        <p><strong style="color: black;">Starting Bid:</strong> $ {{item.price}}</p>
+        <p><strong style="color: black;">Won By:</strong> {{winner.first_name}} {{winner.last_name}}</p>
+        <p><strong style="color: black;">Winning Bid: </strong>$ {{bid.new_bid}}</p>
+        <p><strong style="color: black;">Description:</strong> {{item.description}}</p>
+        {% if item.additional_description != None %}
+        <p style="font-size: 15px;">{{item.additional_description}}</p>
+        {%endif%}
+    </div>
+</div>
+<div id="comments-text">
+    <h3>Comments</h3>
+</div>
+{% if item.comments.exists %}
+    {% for comment in item.comments.all %}
+    <div class="comments-bg">
+        <hr>
+        <div class="card" style="width: 100%;">
+            <div class="card-header">
+                {{comment.author.first_name}} {{comment.author.last_name}}
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <p>{{comment.comment}}</p>
+                    <footer class="blockquote-footer">
+                        {% with ''|center:comment.rating as range %}
+                        {% for _ in range %}
+                        <span class="fa fa-star checked"></span>
+                        {% endfor %}
+                        {% endwith %}
+                    </footer>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+    {%endfor%}
+{%endif%}
+{% if user.is_authenticated%}
+<div id="comments-text">
+    <h3>Add Comment</h3>
+</div>
+<div class="comments-bg">
+    <form action="{% url 'listing' item.id %}" method="POST" id="add-comment">
+        {% csrf_token %}
+        <div class="card" style="width: 100%;">
+            <div class="card-header">
+                <input type="text" name="author" placeholder="username" class="comment-input-bar">
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <p><textarea form='add-comment' name="comment" class="comment-input-bar"
+                            placeholder="Your Comment"></textarea></p>
+                    <footer class="blockquote-footer">
+                        <input type="number" name="rating" placeholder="Rating out of 5" max="5"
+                            class="comment-input-bar">
+                    </footer>
+                </blockquote>
+            </div>
+            <button type="submit" name="comment-submit"
+                style="position:relative;width:fit-content; float:right;">Save</button>
+    </form>
+</div>
+{%endif%}
+{%endblock%}
