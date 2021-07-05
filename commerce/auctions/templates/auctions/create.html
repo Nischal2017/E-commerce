@@ -1,0 +1,75 @@
+{% extends "auctions/layout.html" %}
+{% block style%}
+<style>
+    #Header{
+        font-style: bold;
+        font-family: Raspoutine Medium;
+        color: #ffffff;
+        text-align: center;
+    }
+    #body{
+        margin: 5px;
+        padding:20px;
+        
+    }
+    .reg{
+        padding: 20px;
+        margin: 5px;
+        width: 500px;
+    }
+</style>
+{% endblock %}
+{%block body%}
+<h1 id="Header">Create Listing</h1>
+<form action="{% url 'create' %}" method="post" id='f1' class="reg" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+        <h5 style="font-family: Raspoutine Medium; color:#ffffff; font-style:bold;">Name of the Listing:</h5><input class="form-control" type="text" name="name" placeholder="Name of the Listing">
+    </div>
+    <div class="form-group">
+        <h5 style="font-family: Raspoutine Medium; color:#ffffff; font-style:bold;">Starting Price: ($)</h5><input class="form-control" type="decimal" name="price" placeholder="Starting Price">
+    </div>
+    <div class="form-group">
+        <h5 style="font-family: Raspoutine Medium; color:#ffffff; font-style:bold;">Category: </h5>
+        <select class="form-control" id="exampleFormControlSelect1" name="Category" placeholder="Select Category">
+            <option>Baby</option>
+            <option>Beauty</option>
+            <option>Books</option>
+            <option>Camera & Photo</option>
+            <option>Clothing & Accessories</option>
+            <option>Consumer Electronics</option>
+            <option>Grocery & Gourmet Food</option>
+            <option>Health & Personal Care</option>
+            <option>Home & Garden</option>
+            <option>Industry & Scientific</option>
+            <option>Luggage & Travel Accessories</option>
+            <option>Musical Instruments</option>
+            <option>Office Products</option>
+            <option>Outdoors</option>
+            <option>Personal Computers</option>
+            <option>Pet Supplies</option>
+            <option>Shoes, Handbags & Sunglasses</option>
+            <option>Software</option>
+            <option>Sports</option>
+            <option>Tools & Home Improvements</option>
+            <option>Toys</option>
+            <option>Video Games</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <h5 style="font-family: Raspoutine Medium; color:#ffffff; font-style:bold;">A short Description of the Listing:</h5><textarea class="form-control" form="f1" name="description" placeholder="Description" style=" height:200px;"></textarea>
+    </div>
+    <div class="form-group">
+        <h5 style="font-family: Raspoutine Medium; color:#ffffff; font-style:bold;">Additional Description (if any):</h5>
+        <textarea class="form-control" form="f1" name="additional_description" placeholder="Description"
+            style=" height:400px;"></textarea>
+    </div>
+    <div class="form-group">
+        <h5 style="font-family: Raspoutine Medium; color:#ffffff; font-style:bold; ">Image:</h5><input type="file" name="photo" accept="image/*"  style=" color:#ffffff; font-style:bold; ">
+    </div>
+    <input class="btn btn-primary" type="submit" value="Add Listing"
+        style="background-color:#ffd3b5 ; color:#e42378; border-color:#ffd3b5;">
+    
+</form>
+</div>
+{%endblock%}

@@ -1,0 +1,41 @@
+{% extends "auctions/layout.html" %}
+{% block style%}
+<style>
+    .body{
+        margin: 25px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    .card{
+        min-width: 400px;
+        margin: 5px;
+        border-style: outset;
+        border-color:  #d79ca6;
+    }
+    .card:hover{
+        border-width: 2px;
+        border-color: #e42378;
+        cursor: hand;
+        cursor: pointer;
+        opacity: .9;
+    }
+    .card-body{
+        text-align: center;
+        font-family: Raspoutine Medium;
+        color: #e42378;
+        font-size: 15px;
+    }
+</style>
+{% endblock %}
+{% block body%}
+    <div class="body">
+    {% for item in categories%}
+        <a href="{% url 'category_listings' item%}" style="text-decoration:none;"><div class="card">
+            <div class="card-body">
+                {{item}}
+            </div>
+        </div></a>
+    {% endfor%}
+    </div>
+{% endblock %}
